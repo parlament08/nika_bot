@@ -1,0 +1,5 @@
+# START CRON JOB
+0 9 * * * /usr/local/bin/python3 /app/birthday.py > /proc/1/fd/1 2>/proc/1/fd/2
+0 15 * * 4 /usr/local/bin/python3 /app/matches.py > /proc/1/fd/1 2>/proc/1/fd/2
+0 13 * * 5 /usr/local/bin/python3 /app/weather.py > /proc/1/fd/1 2>/proc/1/fd/2
+# END CRON JOB
