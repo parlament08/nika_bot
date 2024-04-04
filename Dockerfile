@@ -14,9 +14,10 @@ COPY crontab /etc/cron.d/crontab
 RUN chmod 0644 /etc/cron.d/crontab
 # Применяем файл cron
 RUN /usr/bin/crontab /etc/cron.d/crontab
-# Копируем питон файл в контейнер
+# Копируем файлы в контейнер
 COPY birthday.py .
 COPY matches.py .
 COPY weather.py .
+COPY .env .
 # Команда по умолчанию для запуска cron
 CMD ["cron", "-f"]

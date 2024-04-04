@@ -1,18 +1,24 @@
 import requests
 import telebot
 from datetime import datetime, timedelta
+from dotenv import load_dotenv
+import os
 
-my_id = "390636100"
-bot_id = "6497050131:AAEiY1s9lFcjKYauyqZUzG2gNI3a0UUHAP0"
-chat_id = "-1001404957939"
-API_KEY = "ddb0f5ee5abf9b80356478b25479db69"
+# Загрузить переменные среды из файла .env
+load_dotenv()
 
-bot = telebot.TeleBot(bot_id)
+# Получить значение переменной среды
+BOT_ID = os.getenv("BOT_ID")
+YURY_CHAT_ID = os.getenv("YURY_CHAT_ID")
+COMMON_CHAT_ID = os.getenv("COMMON_CHAT_ID")
+WEATHER_API_KEY = os.getenv("WEATHER_API_KEY")
+
+bot = telebot.TeleBot(BOT_ID)
 
 
 def weather_monitoring():
     bot.send_message(
-        390636100,
+        YURY_CHAT_ID,
         "Weather | Nika monitoring")
 
 
@@ -25,9 +31,6 @@ def get_weather_forecast(api_key, city):
     url = f"http://api.openweathermap.org/data/2.5/forecast?q={city}&appid={api_key}&lang=ru&units=metric"
     response = requests.get(url)
     data = response.json()
-
-    print(data['list'])
-
     weather_forecast = {}
     for item in data['list']:
         # Проверяем, что дата принадлежит субботе и время равно 6:00, 9:00 или 12:00
@@ -47,7 +50,7 @@ if __name__ == "__main__":
 
     weather_monitoring()
 
-    api_key = 'ddb0f5ee5abf9b80356478b25479db69'
+    api_key = WEATHER_API_KEY
     city = 'Chisinau'
 
     weather_forecast = get_weather_forecast(api_key, city)
@@ -61,4 +64,4 @@ if __name__ == "__main__":
     title = f"⛅️ Погода в субботу ({date})\n"
     final_text = title + text
 
-    bot.send_message(my_id, final_text)
+    bot.send_message(COMMON_CHAT_ID, final_text)

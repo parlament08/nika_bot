@@ -1,34 +1,40 @@
 from datetime import datetime, timedelta, date
 import requests
 import telebot
+from dotenv import load_dotenv
+import os
 
-my_id = "390636100"
-bot_id = "6497050131:AAEiY1s9lFcjKYauyqZUzG2gNI3a0UUHAP0"
-chat_id = "-1001404957939"
-matches_id = "56251ad66e6c4736826b5c68f3845933"
+# Загрузить переменные среды из файла .env
+load_dotenv()
 
-bot = telebot.TeleBot(bot_id)
+# Получить значение переменной среды
+BOT_ID = os.getenv("BOT_ID")
+YURY_CHAT_ID = os.getenv("YURY_CHAT_ID")
+COMMON_CHAT_ID = os.getenv("COMMON_CHAT_ID")
+WEATHER_API_KEY = os.getenv("WEATHER_API_KEY")
+MATCHES_API_KEY = os.getenv("MATCHES_API_KEY")
+
+bot = telebot.TeleBot(BOT_ID)
 # 12.04 (12 апреля)
 current_date = date.today().strftime("%d/%m")
 
 
 def matches_monitoring():
     bot.send_message(
-        my_id,
+        YURY_CHAT_ID,
         "Matches | Nika monitoring")
 
 
 def send_top_matches():
     # Замените YOUR_API_KEY на ваш собственный ключ API
     final_text = "⚽ Ближайшие матчи топовых команд:\n\n 🏴󠁧󠁢󠁥󠁮󠁧󠁿🏴󠁧󠁢󠁥󠁮󠁧󠁿🏴󠁧󠁢󠁥󠁮󠁧󠁿 APL 🏴󠁧󠁢󠁥󠁮󠁧󠁿🏴󠁧󠁢󠁥󠁮󠁧󠁿🏴󠁧󠁢󠁥󠁮󠁧󠁿󠁧󠁢󠁥󠁮󠁧󠁿\n"
-    API_KEY = matches_id
 
     # URL для получения данных о ближайших матчах в АПЛ
     url_eng = f'https://api.football-data.org/v2/competitions/PL/matches?status=SCHEDULED'
     url_esp = f'https://api.football-data.org/v2/competitions/PD/matches?status=SCHEDULED'
     url_it = f'https://api.football-data.org/v2/competitions/SA/matches?status=SCHEDULED'
     url_ger = f'https://api.football-data.org/v2/competitions/BL1/matches?status=SCHEDULED'
-    headers = {'X-Auth-Token': API_KEY}
+    headers = {'X-Auth-Token': MATCHES_API_KEY}
 
     # Отправляем запрос к API
     response = requests.get(url_eng, headers=headers)
@@ -119,7 +125,7 @@ def send_top_matches():
             if (match_date > now) and match_date < (now + timedelta(days=7)):
                 final_text += f'⏰{match_date.strftime("%d.%m.%Y %H:%M")}\n  {home_team} - {away_team}\n-----\n'
 
-    bot.send_message(chat_id, final_text)
+    bot.send_message(COMMON_CHAT_ID, final_text)
 
 
 def main():
