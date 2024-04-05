@@ -19,5 +19,6 @@ COPY birthday.py .
 COPY matches.py .
 COPY weather.py .
 COPY .env .
+CMD printenv > /etc/environment
 # Команда по умолчанию для запуска cron
 CMD ["cron", "-f"]
